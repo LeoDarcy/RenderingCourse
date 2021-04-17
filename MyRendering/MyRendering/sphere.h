@@ -1,4 +1,6 @@
 #pragma once
+#ifndef SPHERE_H
+#define SPHERE_H
 #include"hitobject.h"
 class sphere :public hitobject {
 public:
@@ -39,6 +41,8 @@ public:
 		hpoint.interaction_point = r.at_ray(solve);
 		hpoint.normal = (hpoint.interaction_point - center) / radius;
 		hpoint.set_face_normal(r, hpoint.normal);
+		hpoint.mat_ptr = mat_ptr;
 		return true;
 	}
 };
+#endif

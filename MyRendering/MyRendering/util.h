@@ -1,10 +1,11 @@
 #pragma once
 //这个文件主要是完成一些基本的功能函数
-
+#ifndef UTIL_H
+#define UTIL_H
 #include<iostream>
-#include "vec3.h"
-#include "camera.h"
-#include "ray.h"
+//#include "vec3.h"
+
+//#include "ray.h"
 // Constants
 
 const double infinity = std::numeric_limits<double>::infinity();
@@ -31,3 +32,4 @@ double clamp(double x, double min, double max) {
 	if (x > max) return max;
 	return x;
 }
+#endif

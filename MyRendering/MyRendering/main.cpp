@@ -1,7 +1,9 @@
 #include"util.h"
 #include"color.h"
+#include"camera.h"
 #include"hitobject_list.h"
 #include"sphere.h"
+#include"material.h"
 using namespace std;
 
 color ray_color(const ray& r, hitobject_list world, double md) {
@@ -10,10 +12,15 @@ color ray_color(const ray& r, hitobject_list world, double md) {
 	}
 	hit_point hpoint;
 	if (world.hit(r, 0.001, infinity, hpoint)) {
+		ray next_ray;
+		color attenuation;
+		if (hpoint.mat_ptr->rebound(r, hpoint, attenuation, next_ray))
+			return attenuation * ray_color(next_ray, world, md - 1);
+		return color(0, 0, 0);
 		//漫反射衰减程度
-		double diffuse_factor = 0.5;
-		ray next_ray(hpoint.interaction_point, hpoint.normal + random_unit_vector());
-		return diffuse_factor * ray_color(next_ray, world, md - 1);
+		//double diffuse_factor = 0.5;
+		//ray next_ray(hpoint.interaction_point, hpoint.normal + random_unit_vector());
+		//return diffuse_factor * ray_color(next_ray, world, md - 1);
 		//return 0.5 * (hpoint.normal + color(1, 1, 1));
 	}
 	vec3 unit_direction = unit_vector(r.get_direction());
@@ -38,7 +45,7 @@ int main() {
 
 	//世界参数
 	hitobject_list world;
-	/*auto material_ground = make_shared<lambertian>(color(0.8, 0.8, 0.0));
+	auto material_ground = make_shared<lambertian>(color(0.8, 0.8, 0.0));
 	auto material_center = make_shared<lambertian>(color(0.7, 0.3, 0.3));
 	auto material_left = make_shared<metal>(color(0.8, 0.8, 0.8));
 	auto material_right = make_shared<metal>(color(0.8, 0.6, 0.2));
@@ -46,14 +53,14 @@ int main() {
 	world.add(make_shared<sphere>(point3(0.0, -100.5, -1.0), 100.0, material_ground));
 	world.add(make_shared<sphere>(point3(0.0, 0.0, -1.0), 0.5, material_center));
 	world.add(make_shared<sphere>(point3(-1.0, 0.0, -1.0), 0.5, material_left));
-	world.add(make_shared<sphere>(point3(1.0, 0.0, -1.0), 0.5, material_right));*/
-	world.add(make_shared<sphere>(point3(0, 0, -1), 0.5));
-	world.add(make_shared<sphere>(point3(0, -100.5, -1), 100));
+	world.add(make_shared<sphere>(point3(1.0, 0.0, -1.0), 0.5, material_right));
+	//world.add(make_shared<sphere>(point3(0, 0, -1), 0.5));
+	//world.add(make_shared<sphere>(point3(0, -100.5, -1), 100));
 	//开始画图，判断光线返回的颜色
 	std::cout << "P3\n" << image_width << ' ' << image_height << "\n255\n";
 	//生成图像
 	for (int j = image_height - 1; j >= 0; --j) {
-		cerr << "\rScanlines remaining " << j << ' ' << flush;
+		cerr << "Scanlines remaining " << j << ' ' << flush;
 		for (int i = 0; i < image_width; ++i) {
 			color pixel_color(0, 0, 0);
 			for (int s = 0; s < samples_per_pixel; s++) {

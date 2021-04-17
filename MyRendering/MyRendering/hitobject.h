@@ -1,8 +1,9 @@
 #pragma once
-
+#ifndef HITOBJECT_H
+#define HITOBJECT_H
 #include"ray.h"
 #include"vec3.h"
-#include"material.h"
+
 using std::shared_ptr;
 class material;
 
@@ -24,6 +25,7 @@ struct hit_point {
 			front_face = true;
 			normal = out_normal;
 		}
+		
 	}
 };
 
@@ -31,3 +33,4 @@ class hitobject {
 public:
 	virtual bool hit(const ray& r, double t_min, double t_max, hit_point& hpoint) const = 0;
 };
+#endif

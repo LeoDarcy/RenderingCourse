@@ -1,4 +1,6 @@
 #pragma once
+#ifndef HITOBJECT_LIST_H
+#define HITOBJECT_LIST_H
 
 #include"hitobject.h"
 #include<memory>
@@ -42,3 +44,4 @@ public:
 	}
 
 };
+#endif

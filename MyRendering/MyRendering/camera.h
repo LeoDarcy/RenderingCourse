@@ -1,4 +1,6 @@
 #pragma once
+#ifndef CAMERA_H
+#define CAMERA_H
 #include"vec3.h"
 #include"ray.h"
 #include"util.h"
@@ -47,3 +49,4 @@ public:
 		return ray(origin, low_left_corner + u * horizontal + v * vertical - origin);
 	}
 };
+#endif

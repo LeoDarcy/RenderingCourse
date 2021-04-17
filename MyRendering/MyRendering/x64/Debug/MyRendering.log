@@ -1,13 +1,2 @@
 ﻿  main.cpp
-e:\file\课程学习\研一\渲染\作业\renderingcourse\myrendering\myrendering\material.h(19): error C2027: 使用了未定义类型“hit_point”
-  e:\file\课程学习\研一\渲染\作业\renderingcourse\myrendering\myrendering\material.h(6): note: 参见“hit_point”的声明
-e:\file\课程学习\研一\渲染\作业\renderingcourse\myrendering\myrendering\material.h(20): error C2027: 使用了未定义类型“hit_point”
-  e:\file\课程学习\研一\渲染\作业\renderingcourse\myrendering\myrendering\material.h(6): note: 参见“hit_point”的声明
-e:\file\课程学习\研一\渲染\作业\renderingcourse\myrendering\myrendering\material.h(20): error C2440: “<function-style-cast>”: 无法从“vec3”转换为“ray”
-  e:\file\课程学习\研一\渲染\作业\renderingcourse\myrendering\myrendering\material.h(20): note: 无构造函数可以接受源类型，或构造函数重载决策不明确
-e:\file\课程学习\研一\渲染\作业\renderingcourse\myrendering\myrendering\material.h(21): error C2027: 使用了未定义类型“hit_point”
-  e:\file\课程学习\研一\渲染\作业\renderingcourse\myrendering\myrendering\material.h(6): note: 参见“hit_point”的声明
-e:\file\课程学习\研一\渲染\作业\renderingcourse\myrendering\myrendering\material.h(21): error C2660: “dot”: 函数不接受 1 个参数
-  e:\file\课程学习\研一\渲染\作业\renderingcourse\myrendering\myrendering\vec3.h(141): note: 参见“dot”的声明
-  material.cpp
-  正在生成代码...
+  MyRendering.vcxproj -> E:\File\课程学习\研一\渲染\作业\RenderingCourse\MyRendering\x64\Debug\MyRendering.exe
