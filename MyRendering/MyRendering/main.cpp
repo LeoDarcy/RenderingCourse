@@ -3,6 +3,7 @@
 #include"camera.h"
 #include"hitobject_list.h"
 #include"sphere.h"
+#include"triangle.h"
 #include"material.h"
 using namespace std;
 
@@ -38,8 +39,8 @@ int main() {
 	//图片参数
 
 	//相机参数
-	point3 lookfrom(1, 1, 1);
-	point3 lookat(0, 0, -1);
+	point3 lookfrom(0, 0, 10);
+	point3 lookat(0, 1, -1);
 	camera cam(lookfrom, lookat, vec3(0, 1, 0), 70, aspect_ratio);
 
 
@@ -51,9 +52,23 @@ int main() {
 	auto material_right = make_shared<metal>(color(0.8, 0.6, 0.2));
 
 	world.add(make_shared<sphere>(point3(0.0, -100.5, -1.0), 100.0, material_ground));
-	world.add(make_shared<sphere>(point3(0.0, 0.0, -1.0), 0.5, material_center));
-	world.add(make_shared<sphere>(point3(-1.0, 0.0, -1.0), 0.5, material_left));
-	world.add(make_shared<sphere>(point3(1.0, 0.0, -1.0), 0.5, material_right));
+	//world.add(make_shared<sphere>(point3(0.0, 0.0, -1.0), 0.5, material_center));
+	//world.add(make_shared<sphere>(point3(-1.0, 0.0, -1.0), 0.5, material_left));
+	//world.add(make_shared<sphere>(point3(1.0, 0.0, -1.0), 0.5, material_right));
+	//triangle1, the light pink metal one
+	vec3 vertexes3_1[3];
+	vertexes3_1[0] = vec3(3, -0.5, -2);
+	vertexes3_1[1] = vec3(-1, -0.5, -4);
+	vertexes3_1[2] = vec3(0, 5, -3);
+	//triangle2, the green lambertian one
+	vec3 vertexes3_2[3];
+	vertexes3_2[0] = vec3(-1, 1.5, -1);
+	vertexes3_2[1] = vec3(-3, 1.5, -1);
+	vertexes3_2[2] = vec3(-2, 3.5, -1);
+
+	world.add(make_shared<triangle>(vertexes3_1,  material_center));
+	world.add(make_shared<triangle>(vertexes3_1,  material_left));
+	world.add(make_shared<sphere>(vec3(-2, 0.5, -1), 1, material_ground));
 	//world.add(make_shared<sphere>(point3(0, 0, -1), 0.5));
 	//world.add(make_shared<sphere>(point3(0, -100.5, -1), 100));
 	//开始画图，判断光线返回的颜色
