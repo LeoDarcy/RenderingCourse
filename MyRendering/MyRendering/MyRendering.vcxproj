@@ -128,9 +128,11 @@
   <ItemGroup>
     <ClInclude Include="camera.h" />
     <ClInclude Include="color.h" />
+    <ClInclude Include="cylinder.h" />
     <ClInclude Include="hitobject.h" />
     <ClInclude Include="hitobject_list.h" />
     <ClInclude Include="material.h" />
+    <ClInclude Include="objfile.h" />
     <ClInclude Include="ray.h" />
     <ClInclude Include="sphere.h" />
     <ClInclude Include="triangle.h" />

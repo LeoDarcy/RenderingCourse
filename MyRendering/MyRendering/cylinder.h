@@ -26,28 +26,33 @@ public:
 		{
 			//不等于才可能相交
 			//上表面
-			double up_t = (center.y() + height - r.get_origin.y()) / direction.y();
+			point3 ori = r.get_origin();
+			double up_t = (center.y() + height - ori.y()) / direction.y();
 			bool upflag = false;
 			bool downflag = false;
-			double down_t = (center.y() - r.get_origin.y()) / direction.y();
+			double down_t = (center.y() - ori.y()) / direction.y();
 			if (up_t >= 0 && up_t >= t_min && up_t <= t_max ){
 				point3 inx = r.at_ray(up_t);
-				if (inx.x() * inx.x() + inx.z() * inx.z() <= radius) {
+				if ((inx.x()-center.x()) * (inx.x() - center.x()) + (inx.z() - center.z()) * (inx.z() - center.z()) <= radius * radius) {
 					upflag = true;
 					hpoint.t = up_t;
 					hpoint.interaction_point = inx;
 					hpoint.mat_ptr = mat_ptr;
 					hpoint.normal = vec3(0, 1, 0);
+					hpoint.set_face_normal(r, hpoint.normal);
 				}
 			}
 			if (down_t >= 0 && down_t >= t_min && down_t <= t_max) {
 				point3 inx = r.at_ray(down_t);
-				if (inx.x() * inx.x() + inx.z() * inx.z() <= radius) {
+				if ((inx.x() - center.x()) * (inx.x() - center.x()) + (inx.z() - center.z()) * (inx.z() - center.z()) <= radius * radius) {
 					downflag = true;
-					hpoint.t = down_t;
-					hpoint.interaction_point = inx;
-					hpoint.mat_ptr = mat_ptr;
-					hpoint.normal = vec3(0, -1, 0);
+					if (down_t < up_t) {
+						hpoint.t = down_t;
+						hpoint.interaction_point = inx;
+						hpoint.mat_ptr = mat_ptr;
+						hpoint.normal = vec3(0, -1, 0);
+						hpoint.set_face_normal(r, hpoint.normal);
+					}
 				}
 			}
 			if (upflag && tmp_t > up_t)
@@ -56,6 +61,7 @@ public:
 				tmp_t = down_t;
 			updown = (upflag || downflag);
 		}
+		
 		double tmp_solve = infinity;
 		bool cylinder_flag = false;
 		double a = direction.x() * direction.x() + direction.z() * direction.z();
@@ -72,20 +78,57 @@ public:
 					hpoint.t = tmp_solve;
 					hpoint.interaction_point = r.at_ray(tmp_solve);
 					hpoint.mat_ptr = mat_ptr;
-					hpoint.normal = vec3(0, -1, 0);
+					hpoint.normal = vec3((hpoint.interaction_point.x() - center.x()) / radius, 0, (hpoint.interaction_point.z() - center.z()) / radius);
+					hpoint.set_face_normal(r, hpoint.normal);
 				}
 			}
 		}
 		else {
 			double discri = b * b - 4 * a * c;
-					if (discri < 0) {
-						cylinder_flag = false;
+			if (discri < 0) {
+				cylinder_flag = false;
+			}
+			else {
+				double solve1 = (-b - sqrt(discri)) / (2 * a);
+				double solve2 = (-b + sqrt(discri)) / (2 * a);
+				if (solve1 > t_min && solve1 < t_max) {
+					point3 inx = r.at_ray(solve1);
+					if (inx.y() >= center.y() && inx.y() <= (center.y() + height)) {
+						cylinder_flag = true;
+						if (updown && solve1 >= tmp_t) {
+							;//不改hpoint
+						}
+						else if (solve1 < tmp_solve) {
+							tmp_solve = solve1;
+							hpoint.t = tmp_solve;
+							hpoint.interaction_point = r.at_ray(tmp_solve);
+							hpoint.mat_ptr = mat_ptr;
+							hpoint.normal = vec3((hpoint.interaction_point.x() - center.x()) / radius, 0, (hpoint.interaction_point.z() - center.z()) / radius);
+							hpoint.set_face_normal(r, hpoint.normal);
+						}
 					}
-					else {
-						;
+				}
+				if (solve2 > t_min && solve2 < t_max) {
+					point3 inx = r.at_ray(solve2);
+					if (inx.y() >= center.y() && inx.y() <= (center.y() + height)) {
+						cylinder_flag = true;
+						if (updown && solve2 >= tmp_t) {
+							;//不改hpoint
+						}
+						else if (solve2 < tmp_solve) {
+							tmp_solve = solve2;
+							hpoint.t = tmp_solve;
+							hpoint.interaction_point = r.at_ray(tmp_solve);
+							hpoint.mat_ptr = mat_ptr;
+							hpoint.normal = vec3((hpoint.interaction_point.x() - center.x()) / radius, 0, (hpoint.interaction_point.z() - center.z()) / radius);
+							hpoint.set_face_normal(r, hpoint.normal);
+						}
 					}
+				}
+			}
 		}
-		
+		if (updown || cylinder_flag)
+			return true;
 		return false;
 	}
 };

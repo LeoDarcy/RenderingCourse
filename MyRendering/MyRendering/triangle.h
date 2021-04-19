@@ -51,7 +51,11 @@ public:
 		hpoint.normal = norm;
 		hpoint.set_face_normal(r, hpoint.normal);
 		hpoint.mat_ptr = mat_ptr;
-		std::cerr << "\n find triangle\n" << std::flush;
+		//std::cerr << "\n find triangle\n" << std::flush;
 		return true;
 	}
+	/*~triangle()
+	{
+		delete[]dots;
+	}*/
 };
